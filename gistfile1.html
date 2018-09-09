@@ -1,0 +1,409 @@
+<html>
+<head>
+	<title>API Example</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Access-Control-Allow-Origin" content="*">
+	<header name = "Access-Control-Allow-Origin" value = "*" >
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script type="text/javascript">
+	
+
+		var accessToken = "554675f0730b49fdafd61ea3a84ee39f";
+		var baseUrl = "https://api.api.ai/v1/";
+
+		$(document).ready(function() {
+			$("#input").keypress(function(event) {
+				if (event.which == 13) {
+					event.preventDefault();
+					// ###################################
+					setResponse("Youuu :"+$("#input").val()+"\n");
+					send();
+				}
+			});
+			$("#rec").click(function(event) {
+				switchRecognition();
+			});
+		});
+
+		var recognition;
+
+
+
+		function startRecognition() {
+			recognition = new webkitSpeechRecognition();
+			recognition.onstart = function(event) {
+				updateRec();
+			};
+			recognition.onresult = function(event) {
+				var text = "";
+			    for (var i = event.resultIndex; i < event.results.length; ++i) {
+			    	text += event.results[i][0].transcript;
+			    }
+			    setInput(text);
+				stopRecognition();
+			};
+			recognition.onend = function() {
+				stopRecognition();
+			};
+			recognition.lang = "en-US";
+			recognition.start();
+		}
+	
+		function stopRecognition() {
+			if (recognition) {
+				recognition.stop();
+				recognition = null;
+			}
+			updateRec();
+		}
+
+		function switchRecognition() {
+			if (recognition) {
+				stopRecognition();
+			} else {
+				startRecognition();
+			}
+		}
+
+		function setInput(text) {
+			$("#input").val(text);
+			send();
+		}
+
+		function updateRec() {
+			$("#rec").text(recognition ? "Stop" : "Speak");
+		}
+		// #############################
+		function getWeatherData(queryInfo){
+			var url = "http://localhost:3000/1/hello";
+			// var appid = "827c804e371f14f3a84538a87b842852";
+			console.log(queryInfo["region"]);
+			var data = $.getJSON(url,
+				{
+					// q:queryInfo["region"],
+					// APPID:appid,
+					// units:"metric"
+					
+				}
+			);
+
+			data.success(
+				// for ((msg.dt_txt[i].description ))
+				function(msg)
+				{
+
+					for(var i=0; i<msg.msg.length;i++){
+					if(msg.msg[i].addr.split(" ")[0] == queryInfo["region"]){
+						var xxx = Math.floor((Math.random() * 3));
+					    setResponse("Bot :  "+msg.msg[i+xxx].title+" and "+msg.msg[i+xxx].tel+";\n");
+						var img1 = msg.msg[i+xxx].imgsrc
+						$("img").attr("src",img1);
+					    break;
+					}
+					console.log(msg.msg[i].imgsrc)
+
+				}
+					// for(var i=0;x<msg.list[i].length;i++)
+						// if (msg.list[i].dt_txt.slice(0,10) == queryInfo.date)
+
+					// for i in dt.split(' '):
+					// 	if i = 
+
+					// console.log(queryInfo["region"])
+					// console.log("OK")
+					// console.log(msg.msg[0].addr.split(" ")[1])
+
+					// setResponse("Bot :  "+
+					// msg.msg[0].addr + 
+					// "and "+
+					// msg.msg[0].title + "\n");
+				}
+			);
+
+			data.error(
+				function(msg)
+				{
+					console.log(msg);
+				}
+			)
+		}
+// #######################################################################################################
+function gethotelData(queryInfo){
+			var url = "http://localhost:3000/2/hello";
+			// var appid = "827c804e371f14f3a84538a87b842852";
+			console.log(queryInfo["region1"]);
+			console.log('in');
+			var data = $.getJSON(url,
+				{
+					// q:queryInfo["region"],
+					
+					
+					// APPID:appid,
+					// units:"metric"
+					
+				}
+			);
+
+			data.success(
+				function(msg)
+
+				{
+
+					for(var i=0; i<msg.msg.length;i++){
+					if(msg.msg[i].addr.split(" ")[0] == queryInfo["region1"]){
+						var xxx = Math.floor((Math.random() * 3));
+					    setResponse("Bot : Hotel Name "+msg.msg[i+xxx].title+" and tel:"+msg.msg[i+xxx].tel+"\n");
+						var img1 = msg.msg[i+xxx].imgsrc
+						$("img").attr("src","https:"+img1);
+					    break;
+					}
+				}
+				// setResponse("Bot : The weather is "+msg.weather[0].description+" and the temperature is around "+msg.main.temp+"&#8451;\n");
+				console.log(msg.msg[i].imgsrc)					
+				console.log(img1);
+				console.log(img12);
+				}
+			);
+
+			data.error(
+				function(msg)
+				{
+					console.log(msg);
+					console.log(img1);
+				}
+			)
+		}
+
+// ###############################################################
+function getviewData(queryInfo){
+			var url = "http://localhost:3000/3/hello";
+			// var appid = "827c804e371f14f3a84538a87b842852";
+			console.log(queryInfo["regionview"]);
+			console.log('in');
+			var data = $.getJSON(url,
+				{
+					// q:queryInfo["region"],
+					
+					
+					// APPID:appid,
+					// units:"metric"
+					
+				}
+			);
+
+			data.success(
+				function(msg)
+
+				{
+
+					for(var i=0; i<msg.msg.length;i++){
+					if(msg.msg[i].addr.split(" ")[0] == queryInfo["regionview"]){
+						var xxx = Math.floor((Math.random() * 3));
+					    setResponse("Bot : Name: "+msg.msg[i+xxx].name+"\n"+" introduction:"+msg.msg[i+xxx].introduction+"\n");
+						var img12 = msg.msg[i+xxx].imgsrc
+						$("img").attr("src",img12);
+					    break;
+					}
+				}
+				console.log(msg.msg[0])
+				}
+			);
+
+			data.error(
+				function(msg)
+				{
+					console.log(msg);
+				}
+			)
+		}
+//###############################################################################################################
+function getallData(queryInfo){
+			var url = "http://localhost:3000/4/hello";
+			// var appid = "827c804e371f14f3a84538a87b842852";
+			// console.log(queryInfo);
+			// console.log('in');
+			var data = $.getJSON(url,
+				{
+					data:queryInfo["date"],
+					views:queryInfo["views"],
+					resname:queryInfo["resname"],
+					resdate:queryInfo["resdate"],
+					hotelname:queryInfo["hotelname"],
+					yourname:queryInfo["yourname"],
+					hottel:queryInfo["hottel"],
+					// APPID:appid,
+					// units:"metric"
+					
+				}
+			);
+
+			data.success(
+				function(msg)
+
+				{
+
+					for(var i=0; i<msg.msg.length;i++){
+					if(msg.msg[i].addr.split(" ")[0] == queryInfo["regionview"]){
+
+					    setResponse("Bot : Name: "+msg.msg[i].name+"\n"+" introduction:"+msg.msg[i].introduction+"\n");
+						var img12 = msg.msg[i].imgsrc
+						$("img").attr("src",img12);
+					    break;
+					}
+				}
+				console.log(msg.msg[0])
+				}
+			);
+
+			data.error(
+				function(msg)
+				{
+					console.log(msg);
+				}
+			)
+		}
+// ###############################################################################################################
+function looknumData(queryInfo){
+			var url = "http://localhost:3000/6/hello";
+			// var appid = "827c804e371f14f3a84538a87b842852";
+			var data = $.getJSON(url,
+				{
+					idoneday:queryInfo["idoneday"],
+					
+					
+					// APPID:appid,
+					// units:"metric"
+					
+				}
+			);
+
+			data.success(
+				function(msg)
+				{
+						console.log(msg.msg[0])
+					    setResponse("Bot :"+"\n"+" 編號: "+msg.msg[0].idoneday+"\n"+" Date: "+msg.msg[0].date+"\n"+" restaurant: "+msg.msg[0].resname+"\n"+" orderdate: "+msg.msg[0].resdate+"\n"+" Hotel: "+msg.msg[0].hotelname+"\n"+" views: "+msg.msg[0].views+"\n"+"-------------------"+"\n");
+
+
+				}
+
+			);
+
+			data.error(
+				function(msg)
+				{
+					console.log(msg);
+				}
+			)
+		}
+//################################################################################################################
+function lookData(queryInfo){
+			var url = "http://localhost:3000/5/hello";
+			// var appid = "827c804e371f14f3a84538a87b842852";
+			var data = $.getJSON(url,
+				{
+					
+					
+					// APPID:appid,
+					// units:"metric"
+					
+				}
+			);
+
+			data.success(
+				function(msg)
+				{
+						var onum = (msg.msg.length-1)
+						console.log(msg.msg.length)
+					    setResponse("Bot :"+"\n"+" 編號: "+msg.msg[onum].idoneday+"\n"+" Date: "+msg.msg[0].date+"\n"+" restaurant: "+msg.msg[0].resname+"\n"+" orderdate: "+msg.msg[0].resdate+"\n"+" Hotel: "+msg.msg[0].hotelname+"\n"+" views: "+msg.msg[0].views+"\n"+"-------------------"+"\n");
+
+
+				}
+
+			);
+
+			data.error(
+				function(msg)
+				{
+					console.log(msg);
+				}
+			)
+		}
+//###################################################################################################################
+		function send() {
+			var text = $("#input").val();
+			$.ajax({
+				type: "POST",
+				url: baseUrl + "query?v=20150910",
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				headers: {
+					"Authorization": "Bearer " + accessToken
+				},
+				data: JSON.stringify({ query: text, lang: "en", sessionId: "somerandomthing" }),
+// ###################################################################################################
+				success: function(data) {
+					// setResponse(JSON.stringify(data, undefined, 2));
+					var result = JSON.stringify(data, undefined,2);
+					var jsonData = JSON.parse(result);
+					setResponse("Bottt:"+jsonData.result.fulfillment.speech+"\n");
+					$("#input").val("");
+					console.log(jsonData.result.fulfillment.speech);
+					console.log(jsonData.result.actionIncomplete);
+					console.log(jsonData.result.parameters);
+					if(!jsonData.result.actionIncomplete){
+						if(jsonData.result.fulfillment.speech == "好的 馬上幫你找吃的"){
+							getWeatherData(jsonData.result.parameters);
+							}
+						else if(jsonData.result.fulfillment.speech == "好的 馬上幫你找住的"){
+							gethotelData(jsonData.result.parameters);
+							}
+						else if(jsonData.result.fulfillment.speech == "好的 馬上幫你找景點"){
+							getviewData(jsonData.result.parameters);
+							}
+						else if(jsonData.result.fulfillment.speech == "好的 都訂好了 請輸入 查看 確認"){
+							getallData(jsonData.result.parameters);
+							}
+						else if(jsonData.result.fulfillment.speech == "馬上幫你列出來"){
+							lookData(jsonData.result.parameters);
+							}
+						else if(jsonData.result.fulfillment.speech == "立馬幫你列出來"){
+							looknumData(jsonData.result.parameters);
+							}
+					}
+				},
+				error: function() {
+					setResponse("Internal Server Error");
+				}
+			});
+			// setResponse("Loading...");
+		}
+
+		function setResponse(val) {
+			// ###################################################
+			// $("#response").text(val);
+			$("#response").prepend(val);
+		}
+		
+		
+	</script>
+	<style type="text/css">
+		body { width: 500px; margin: 0 auto; text-align: center; margin-top: 20px; }
+		div {  position: absolute; }
+		input { width: 400px; }
+		button { width: 50px; }
+		textarea { width: 100%; }
+	</style>
+</head>
+<body>
+	<div>
+		<input id="input" type="text"> <button id="rec">Speak</button>
+		<br>Response<br> <textarea id="response" cols="40" rows="20"></textarea>
+		<!-- <div>
+		<img src="img1" alt="替代文字一" title="範例圖片一">
+		</div> -->
+	</div>
+</body>
+	<div style="margin-top: 400px">
+		<img src="img1" alt="" title="" width="460px" height="300px">
+	</div>
+</html>
